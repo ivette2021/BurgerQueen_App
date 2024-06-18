@@ -8,6 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrls: ['./footer.component.scss'],
   standalone: true,
   imports: [IonicModule, TranslateModule],
+  //
 })
 export class FooterComponent {
   constructor() {}
