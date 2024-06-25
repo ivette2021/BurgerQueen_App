@@ -22,5 +22,13 @@ export class CategoriesState {
   static categories(state: CategoriesStateModel) {}
   constructor(private categoriesService: CategoriesService) {}
   @Action(GetCategories)
-  add({ getState, setState }: StateContext<CategoriesStateModel>) {}
+  getCategories({ setState }: StateContext<CategoriesStateModel>) {
+    return this.categoriesService
+      .getCategories()
+      .then((categories: Category[]) => {
+        setState({
+          categories,
+        });
+      });
+  }
 }

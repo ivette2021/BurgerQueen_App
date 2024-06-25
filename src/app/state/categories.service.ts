@@ -1,8 +1,8 @@
-import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CapacitorHttp } from '@capacitor/core';
+import { CapacitorHttp, HttpResponse } from '@capacitor/core';
 import { error } from 'jquery';
 import { environment } from 'src/environments/environment';
+import { Category } from '../models/category';
 
 @Injectable({
   providedIn: 'root',

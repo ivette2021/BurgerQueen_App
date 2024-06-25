@@ -1,3 +1,3 @@
-export class CategoriesAction {
-  static readonly type = '[Categories] Add item';
+export class GetCategories {
+  static readonly type = '[Categories] Get categories';
 }

@@ -36,23 +36,18 @@ export class CategoriesPage implements OnInit {
 
     loading.present();
 
-    setTimeout(() => {
-      this.store.dispatch(new GetCategories()).subscribe({
-        next: () => {
-          this.categories = this.store.selectSnapshot(
-            CategoriesState.categories
-          );
-          console.log(this.categories);
-          loading.dismiss();
-        },
-        error: (err) => {
-          console.error(err);
-        },
-        complete: () => {
-          loading.dismiss();
-        },
-      });
-    }, 5000);
+    this.store.dispatch(new GetCategories()).subscribe({
+      next: () => {
+        this.categories = this.store.selectSnapshot(CategoriesState.categories);
+        console.log(this.categories);
+      },
+      error: (err) => {
+        console.error(err);
+      },
+      complete: () => {
+        loading.dismiss();
+      },
+    });
   }
   goToProducts(category: Category) {
     this.navParams.data['idCategory'] = category._id;
