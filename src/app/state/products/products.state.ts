@@ -11,16 +11,15 @@ export class ProductsStateModel {
 
 const defaults = {
   products: [],
-  product: null
+  product: null,
 };
 
 @State<ProductsStateModel>({
   name: 'products',
-  defaults
+  defaults,
 })
 @Injectable()
 export class ProductsState {
-
   @Selector()
   static products(state: ProductsStateModel) {
     return state.products;
@@ -31,15 +30,27 @@ export class ProductsState {
     return state.product;
   }
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService) {}
 
   @Action(GetProductsByCategory)
-  getProductsByCategory({ getState, setState }: StateContext<ProductsStateModel>, { payload }: GetProductsByCategory) {
-
+  getProductsByCategory(
+    { getState, setState }: StateContext<ProductsStateModel>,
+    { payload }: GetProductsByCategory
+  ) {
+    return this.productService
+      .getProductsByCategory(payload.idCategory)
+      .then((products: Product[]) => {
+        const state = getState();
+        setState({
+          ...state,
+          products,
+        });
+      });
   }
 
   @Action(GetProductById)
-  getProductById({ getState, setState }: StateContext<ProductsStateModel>, { payload }: GetProductById) {
-
-  }
+  getProductById(
+    { getState, setState }: StateContext<ProductsStateModel>,
+    { payload }: GetProductById
+  ) {}
 }
