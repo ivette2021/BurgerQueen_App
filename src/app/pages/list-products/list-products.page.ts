@@ -53,4 +53,8 @@ export class ListProductsPage implements OnInit {
       this.navController.navigateForward('categories');
     }
   }
+  goToProduct(product: Product) {
+    this.navParams.data['product'] = product;
+    this.navController.navigateForward('product');
+  }
 }
