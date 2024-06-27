@@ -12,7 +12,6 @@ import { CategoriesState } from 'src/app/state/categories/categories.state';
   styleUrls: ['./categories.page.scss'],
 })
 export class CategoriesPage implements OnInit {
-
   public categories: Category[];
 
   constructor(
@@ -30,30 +29,28 @@ export class CategoriesPage implements OnInit {
   }
 
   async loadData() {
-
     const loading = await this.loadingController.create({
       message: this.translate.instant('label.loading'),
     });
 
-    loading.present();
+    await loading.present();
 
     this.store.dispatch(new GetCategories()).subscribe({
       next: () => {
         this.categories = this.store.selectSnapshot(CategoriesState.categories);
         console.log(this.categories);
-      }, error: (err) => {
+      },
+      error: (err) => {
         console.error(err);
       },
       complete: () => {
         loading.dismiss();
-      }
+      },
     });
-
   }
 
-  goToProducts(category: Category){
+  goToProducts(category: Category) {
     this.navParams.data['idCategory'] = category._id;
-    this.navController.navigateForward('list-products')
+    this.navController.navigateForward('list-products');
   }
-
 }
