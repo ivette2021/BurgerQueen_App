@@ -1,8 +1,8 @@
-import { Category } from './../../models/category';
 import { Component, OnInit } from '@angular/core';
 import { LoadingController, NavController, NavParams } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
+import { Category } from './../../models/category';
 import { GetCategories } from 'src/app/state/categories.actions';
 import { CategoriesState } from 'src/app/state/categories.state';
 
@@ -31,28 +31,22 @@ export class CategoriesPage implements OnInit {
   async loadData() {
     const loading = await this.loadingController.create({
       message: this.translate.instant('label.loading'),
-      duration: 3000,
     });
 
     loading.present();
 
-    setTimeout(() => {
-      this.store.dispatch(new GetCategories()).subscribe({
-        next: () => {
-          this.categories = this.store.selectSnapshot(
-            CategoriesState.categories
-          );
-          console.log(this.categories);
-          loading.dismiss();
-        },
-        error: (err) => {
-          console.error(err);
-        },
-        complete: () => {
-          loading.dismiss();
-        },
-      });
-    }, 5000);
+    this.store.dispatch(new GetCategories()).subscribe({
+      next: () => {
+        this.categories = this.store.selectSnapshot(CategoriesState.categories);
+        console.log(this.categories);
+      },
+      error: (err) => {
+        console.error(err);
+      },
+      complete: () => {
+        loading.dismiss();
+      },
+    });
   }
   goToProducts(category: Category) {
     this.navParams.data['idCategory'] = category._id;
