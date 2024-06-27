@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { LoadingController, NavController, NavParams } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngxs/store';
-import { Category } from './../../models/category';
-import { GetCategories } from 'src/app/state/categories.actions';
-import { CategoriesState } from 'src/app/state/categories.state';
+import { Category } from 'src/app/models/category';
+import { GetCategories } from 'src/app/state/categories/categories.actions';
+import { CategoriesState } from 'src/app/state/categories/categories.state';
 
 @Component({
   selector: 'app-categories',
@@ -12,6 +12,7 @@ import { CategoriesState } from 'src/app/state/categories.state';
   styleUrls: ['./categories.page.scss'],
 })
 export class CategoriesPage implements OnInit {
+
   public categories: Category[];
 
   constructor(
@@ -29,6 +30,7 @@ export class CategoriesPage implements OnInit {
   }
 
   async loadData() {
+
     const loading = await this.loadingController.create({
       message: this.translate.instant('label.loading'),
     });
@@ -39,17 +41,19 @@ export class CategoriesPage implements OnInit {
       next: () => {
         this.categories = this.store.selectSnapshot(CategoriesState.categories);
         console.log(this.categories);
-      },
-      error: (err) => {
+      }, error: (err) => {
         console.error(err);
       },
       complete: () => {
         loading.dismiss();
-      },
+      }
     });
+
   }
-  goToProducts(category: Category) {
+
+  goToProducts(category: Category){
     this.navParams.data['idCategory'] = category._id;
-    this.navController.navigateForward('list-products');
+    this.navController.navigateForward('list-products')
   }
+
 }
