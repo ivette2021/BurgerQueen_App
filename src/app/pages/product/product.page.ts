@@ -10,6 +10,7 @@ import { ProductExtraOption } from 'src/app/models/product-extra-option';
 })
 export class ProductPage implements OnInit {
   public product: Product;
+  public total: number;
 
   constructor(
     private navController: NavController,
@@ -21,6 +22,7 @@ export class ProductPage implements OnInit {
 
   ngOnInit() {
     if (!this.product) {
+      this.total = this.product.price;
       this.navController.navigateForward('categories');
     }
   }
@@ -49,6 +51,6 @@ export class ProductPage implements OnInit {
         }
       });
     });
-    this.total = total;
+    this.total = +total.toFixed(2);
   }
 }
