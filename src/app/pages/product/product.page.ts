@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from '@ionic/angular';
+import { Store } from '@ngxs/store';
 import { Product } from 'src/app/models/product';
 import { ProductExtraOption } from 'src/app/models/product-extra-option';
+import { GetProductById } from 'src/app/state/products/products.actions';
+import { ProductsState } from 'src/app/state/products/products.state';
 
 @Component({
   selector: 'app-product',
@@ -14,7 +17,8 @@ export class ProductPage implements OnInit {
 
   constructor(
     private navController: NavController,
-    private navParams: NavParams
+    private navParams: NavParams,
+    private store: Store
   ) {
     console.log(this.navParams.data['product']);
     this.product = this.navParams.data['product'];
@@ -52,5 +56,19 @@ export class ProductPage implements OnInit {
       });
     });
     this.total = +total.toFixed(2);
+  }
+  getProduct($event) {
+    this.store
+      .dispatch(new GetProductById({ id: this.product._id }))
+      .subscribe({
+        next: () => {
+          this.product = this.store.selectSnapshot(ProductsState.product);
+          this.calculateTotal();
+        },
+
+        complete: () => {
+          $event.target.complete();
+        },
+      });
   }
 }

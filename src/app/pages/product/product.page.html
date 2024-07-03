@@ -1,4 +1,8 @@
 <ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="get($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ion-grid *ngIf="!product.extras">
     <ion-row>
       <ion-col>
