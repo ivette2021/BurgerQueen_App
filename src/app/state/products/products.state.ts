@@ -52,5 +52,15 @@ export class ProductsState {
   getProductById(
     { getState, setState }: StateContext<ProductsStateModel>,
     { payload }: GetProductById
-  ) {}
+  ) {
+    return this.productService
+      .GetProductById(payload.id)
+      .then((product: Product) => {
+        const state = getState();
+        setState({
+          ...state,
+          product,
+        });
+      });
+  }
 }
