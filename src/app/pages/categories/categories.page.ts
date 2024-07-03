@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoadingController, NavController, NavParams } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Category } from 'src/app/models/category';
 import { GetCategories } from 'src/app/state/categories/categories.actions';
 import { CategoriesState } from 'src/app/state/categories/categories.state';
@@ -12,11 +12,12 @@ import { CategoriesState } from 'src/app/state/categories/categories.state';
   templateUrl: './categories.page.html',
   styleUrls: ['./categories.page.scss'],
 })
-export class CategoriesPage implements OnInit {
+export class CategoriesPage {
   @Select(CategoriesState.categories)
   private categories$: Observable<Category[]>;
 
   public categories: Category[];
+  private subscription: Subscription;
 
   constructor(
     private store: Store,
@@ -28,7 +29,8 @@ export class CategoriesPage implements OnInit {
     this.categories = [];
   }
 
-  ngOnInit() {
+  ionViewWillEnter() {
+    this.subscription = new Subscription();
     this.loadData();
   }
 
@@ -60,5 +62,8 @@ export class CategoriesPage implements OnInit {
   refreshCategories($event) {
     this.store.dispatch(new GetCategories());
     $event.target.complete();
+  }
+  ionViewWillLeave() {
+    this.subscription.unsubscribe();
   }
 }

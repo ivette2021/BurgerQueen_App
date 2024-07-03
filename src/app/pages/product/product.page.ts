@@ -11,7 +11,7 @@ import { ProductsState } from 'src/app/state/products/products.state';
   templateUrl: './product.page.html',
   styleUrls: ['./product.page.scss'],
 })
-export class ProductPage implements OnInit {
+export class ProductPage {
   public product: Product;
   public total: number;
 
@@ -20,23 +20,25 @@ export class ProductPage implements OnInit {
     private navParams: NavParams,
     private store: Store
   ) {
-    console.log(this.navParams.data['product']);
-    this.product = this.navParams.data['product'];
+    this.product = null;
   }
 
-  ngOnInit() {
-    if (!this.product) {
+  ionViewWillEnter() {
+    console.log(this.navParams.data['product']);
+    this.product = this.navParams.data['product'];
+
+    if (this.product && this.product.extras) {
       this.total = this.product.price;
+    }
+
+    if (!this.product) {
       this.navController.navigateForward('categories');
     }
   }
-  changeMultipleOption($event, options: ProductExtraOption[]) {
-    console.log($event);
 
+  changeMultipleOption($event, options: ProductExtraOption[]) {
     options.forEach((op) => (op.activate = $event.detail.value == op.name));
 
-    console.log(options);
-    console.log(this.product);
     this.calculateTotal();
   }
 
@@ -55,8 +57,10 @@ export class ProductPage implements OnInit {
         }
       });
     });
+
     this.total = +total.toFixed(2);
   }
+
   getProduct($event) {
     this.store
       .dispatch(new GetProductById({ id: this.product._id }))
@@ -65,7 +69,6 @@ export class ProductPage implements OnInit {
           this.product = this.store.selectSnapshot(ProductsState.product);
           this.calculateTotal();
         },
-
         complete: () => {
           $event.target.complete();
         },

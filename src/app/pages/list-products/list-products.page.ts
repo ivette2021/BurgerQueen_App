@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, LoadingController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Product } from 'src/app/models/product';
 import { GetProductsByCategory } from 'src/app/state/products/products.actions';
 import { ProductsState } from 'src/app/state/products/products.state';
@@ -12,11 +12,13 @@ import { ProductsState } from 'src/app/state/products/products.state';
   templateUrl: './list-products.page.html',
   styleUrls: ['./list-products.page.scss'],
 })
-export class ListProductsPage implements OnInit {
+export class ListProductsPage {
   @Select(ProductsState.products)
   private product$: Observable<Product[]>;
   public products: Product[];
   private idCategory: string;
+
+  private subscription: Subscription;
 
   constructor(
     private navController: NavController,
@@ -25,12 +27,14 @@ export class ListProductsPage implements OnInit {
     private loadingController: LoadingController,
     private translate: TranslateService
   ) {
-    console.log(this.navParams.data['idCategory']);
-    this.idCategory = this.navParams.data['idCategory'];
     this.products = [];
+    this.subscription = new Subscription();
   }
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
+    console.log(this.navParams.data['idCategory']);
+    this.idCategory = this.navParams.data['idCategory'];
+
     if (this.idCategory) {
       const loading = await this.loadingController.create({
         message: this.translate.instant('label.loading'),
@@ -38,9 +42,11 @@ export class ListProductsPage implements OnInit {
 
       await loading.present();
 
-      // this.store
-      //   .dispatch(new GetProductsByCategory({ idCategory: this.idCategory }))
-      this.product$.subscribe({
+      this.store.dispatch(
+        new GetProductsByCategory({ idCategory: this.idCategory })
+      );
+
+      const sub = this.product$.subscribe({
         next: () => {
           this.products = this.store.selectSnapshot(ProductsState.products);
           console.log(this.products);
@@ -51,6 +57,7 @@ export class ListProductsPage implements OnInit {
           loading.dismiss();
         },
       });
+      this.subscription.add(sub);
     } else {
       this.navController.navigateForward('categories');
     }
@@ -61,8 +68,14 @@ export class ListProductsPage implements OnInit {
   }
   refreshProducts($event) {
     this.store.dispatch(
-      new GetProductsByCategory({ idCategory: this.idCategory })
+      new GetProductsByCategory({
+        idCategory: this.idCategory,
+      })
     );
     $event.target.complete();
+  }
+  ionViewWillLeave() {
+    console.log('Eliminando subscripciones');
+    this.subscription.unsubscribe();
   }
 }
