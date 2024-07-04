@@ -41,17 +41,17 @@
           <ion-card-header>
             <ion-card-title> {{block.name | translate}} </ion-card-title>
           </ion-card-header>
-          <ion-card-content
-            *ngIf="block.options.length == 1"
-          ></ion-card-content>
-          <ion-checkbox
-            (ionChange)="calculateTotal()"
-            [(ngModel)]="block.options[0].activate"
-            name="check"
-            labelPlacement="end"
-            >{{(block.options[0].activate ? block.options[0].price : '0') +
-            '$'}}
-          </ion-checkbox>
+          <ion-card-content *ngIf="block.options.length == 1"
+            ><ion-checkbox
+              (ionChange)="calculateTotal()"
+              [(ngModel)]="block.options[0].activate"
+              name="check"
+              labelPlacement="end"
+              >{{(block.options[0].activate ? block.options[0].price : '0') +
+              '$'}}
+            </ion-checkbox></ion-card-content
+          >
+
           <ion-card-content *ngIf="block.options.length > 1">
             <ion-radio-group
               [value]="block.options[0].name"

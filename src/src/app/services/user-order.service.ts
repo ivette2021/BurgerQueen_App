@@ -43,6 +43,15 @@ export class UserOrderService {
   getProducts() {
     return this.order.products;
   }
+  numProducts() {
+    if (this.order && this.order.products.length > 0) {
+      return this.order.products.reduce(
+        (acum: number, value: QuantityProduct) => value.quantity + acum,
+        0
+      );
+    }
+    return 0;
+  }
   async addProduct(product: Product) {
     const productFound = this.searchProduct(product);
 
@@ -60,5 +69,8 @@ export class UserOrderService {
     return this.order.products.find((p: QuantityProduct) =>
       isEqual(p.product, product)
     );
+  }
+  hasUser() {
+    return this.order && this.order.user;
   }
 }
