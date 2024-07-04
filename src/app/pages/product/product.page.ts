@@ -5,6 +5,9 @@ import { Product } from 'src/app/models/product';
 import { ProductExtraOption } from 'src/app/models/product-extra-option';
 import { GetProductById } from 'src/app/state/products/products.actions';
 import { ProductsState } from 'src/app/state/products/products.state';
+import { UserOrderService } from '../../../src/app/services/user-order.service';
+import { ToastService } from 'src/src/app/services/toast.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product',
@@ -18,7 +21,10 @@ export class ProductPage {
   constructor(
     private navController: NavController,
     private navParams: NavParams,
-    private store: Store
+    private store: Store,
+    private userOrderService: UserOrderService,
+    private toastService: ToastService,
+    private translate: TranslateService
   ) {
     this.product = null;
   }
@@ -73,5 +79,13 @@ export class ProductPage {
           $event.target.complete();
         },
       });
+  }
+  addProductOrder() {
+    this.userOrderService.addProduct(this.product);
+    console.log(this.userOrderService.getProducts());
+    this.toastService.showToast(
+      this.translate.instant('label.product.add.success')
+    );
+    this.navController.navigateRoot('/');
   }
 }
