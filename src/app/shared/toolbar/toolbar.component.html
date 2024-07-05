@@ -7,8 +7,10 @@
     </ion-title>
   </ion-header>
   <ion-content>
-    <ion-list>
-      <ion-item>
+    <ion-list *ngIf="!showInfoUser">
+      <ion-item
+        (click)="userOrderService.hasUser() ? logout() : showPanelInfoUser()"
+      >
         <ion-icon slot="start" name="people-outline"></ion-icon>
         <ion-label>{{
           (userOrderService.hasUser() ? "label logout" : "label.start.session")
@@ -22,6 +24,7 @@
       </ion-item>
     </ion-list>
   </ion-content>
+  <app-login *ngIf="showInfoUser" (back)="back()"></app-login>
 </ion-menu>
 
 <ion-header transluent>

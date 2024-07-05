@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Order } from '../../../app/models/order';
 import { Preferences } from '@capacitor/preferences';
-import { KEY_ORDER } from '../constants/constants';
+import { KEY_ORDER } from '../../../app/constants/constants';
 import { Product } from '../models/product';
 import { isEqual } from 'lodash-es';
 import { QuantityProduct } from 'src/app/models/quantity-products';
