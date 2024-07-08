@@ -18,6 +18,7 @@ import { CategoriesState } from './state/categories/categories.state';
 import { ProductsState } from './state/products/products.state';
 import { AuthState } from './state/auth/state/auth.state';
 import { LoginComponent } from './shared/login/login.component';
+import { UsersState } from './state/users/users.state';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -37,7 +38,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient],
       },
     }),
-    NgxsModule.forRoot([CategoriesState, ProductsState, AuthState]),
+    NgxsModule.forRoot([CategoriesState, ProductsState, AuthState, UsersState]),
     ToolbarComponent,
     FooterComponent,
     LoginComponent,

@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Order } from '../../../app/models/order';
+import { Order } from '../models/order';
 import { Preferences } from '@capacitor/preferences';
-import { KEY_ORDER } from '../../../app/constants/constants';
+import { KEY_ORDER } from '../constants/constants';
+import { User } from '../models/user';
 import { Product } from '../models/product';
-import { isEqual } from 'lodash-es';
-import { QuantityProduct } from 'src/app/models/quantity-products';
-import { User } from 'src/app/models/user';
+import { QuantityProduct } from '../models/quantity-products';
 
 @Injectable({
   providedIn: 'root',
@@ -13,25 +12,24 @@ import { User } from 'src/app/models/user';
 export class UserOrderService {
   private order: Order;
 
-  constructor() {
-    this.initOrder();
-  }
+  constructor() {}
+
   async initOrder() {
     const order = await Preferences.get({ key: KEY_ORDER });
-    if (!order.value) {
-      this.clear();
+    if (order.value) {
+      this.order = new Order();
+      this.order.products = [];
+      this.saveOrder();
     } else {
       this.order = JSON.parse(order.value);
     }
   }
-
   async saveOrder() {
     await Preferences.set({
       key: KEY_ORDER,
       value: JSON.stringify(this.order),
     });
   }
-
   async resetOrder() {
     this.order.products = [];
     await this.saveOrder();
@@ -42,9 +40,11 @@ export class UserOrderService {
     this.order.products = [];
     await this.saveOrder();
   }
+
   getProducts() {
     return this.order.products;
   }
+
   numProducts() {
     if (this.order && this.order.products.length > 0) {
       return this.order.products.reduce(
@@ -54,6 +54,7 @@ export class UserOrderService {
     }
     return 0;
   }
+
   async addProduct(product: Product) {
     const productFound = this.searchProduct(product);
 
@@ -65,19 +66,26 @@ export class UserOrderService {
         quantity: 1,
       });
     }
+
     await this.saveOrder();
   }
+
   private searchProduct(product: Product) {
     return this.order.products.find((p: QuantityProduct) =>
       isEqual(p.product, product)
     );
   }
+
   hasUser() {
     return this.order && this.order.user;
   }
+
   async saveUser(user: User) {
     delete user.password;
     this.order.user = user;
     await this.saveOrder();
   }
+}
+function isEqual(product: Product, product1: Product): unknown {
+  throw new Error('Function not implemented.');
 }
