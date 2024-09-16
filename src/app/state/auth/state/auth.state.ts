@@ -27,7 +27,7 @@ export class AuthState {
   constructor(private authService: AuthService) {}
   @Action(Login)
   login(
-    { getState, setState }: StateContext<AuthStateModel>,
+    {  setState }: StateContext<AuthStateModel>,
     { payload }: Login
   ) {
     return this.authService

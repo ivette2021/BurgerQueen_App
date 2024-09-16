@@ -22,6 +22,8 @@ export class AuthService {
         return data;
       }
       return null;
-    });
+    }).catch(err => {
+      return null;
+    })
   }
 }

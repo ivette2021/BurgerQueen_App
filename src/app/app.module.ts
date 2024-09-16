@@ -38,7 +38,12 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient],
       },
     }),
-    NgxsModule.forRoot([CategoriesState, ProductsState, AuthState, UsersState]),
+    NgxsModule.forRoot([
+      CategoriesState,
+       ProductsState,
+        AuthState,
+        UsersState
+        ]),
     ToolbarComponent,
     FooterComponent,
     LoginComponent,
