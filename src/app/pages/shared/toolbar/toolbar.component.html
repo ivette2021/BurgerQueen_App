@@ -20,7 +20,7 @@
       </ion-item>
     </ion-list>
 
-    <app-login *ngIf="showInfoUser"></app-login>
+    <app-login *ngIf="showInfoUser" (back)="back()" (doLogin)="back()"></app-login>
 
   </ion-content>
 </ion-menu>

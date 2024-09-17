@@ -41,6 +41,10 @@ export class ToolbarComponent implements OnInit {
     this.navController.back();
   }
 
+  back(){
+    this.showInfoUser = false;
+  }
+
   logout(){
 
   }
